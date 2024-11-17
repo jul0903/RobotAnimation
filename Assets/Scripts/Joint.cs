@@ -11,7 +11,4 @@ public class Joint : MonoBehaviour
     {
         startOffset = this.transform.localPosition;
     }
-
-   
-
 }

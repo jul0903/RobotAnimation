@@ -85,23 +85,6 @@ public class FordwardKinematics2 : MonoBehaviour
 
     }
 
-    public void StartMoving()
-    {
-        Vector3 targetPosition = target.position;  // Posición objetivo
-
-        float maxReach = 0f;
-        foreach (var joint in joints)
-            maxReach += joint.startOffset.magnitude;
-
-        if (Vector3.Distance(joints[0].transform.position, targetPosition) > maxReach)
-        {
-            Debug.LogError("El objetivo está fuera del alcance del brazo.");
-            return;
-        }
-
-        isMoving = true; // Inicia el proceso de movimiento
-    }
-
     private void Start()
     {
         InitializeOffsets();

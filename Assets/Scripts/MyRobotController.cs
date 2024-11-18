@@ -7,9 +7,11 @@ public class MyRobotController : MonoBehaviour
     // Array de 5 articulaciones del brazo robótico
     public Transform[] joints = new Transform[5];
 
-    // Ángulos actuales y objetivos de las articulaciones (en grados)
+    // Angulos actuales y objetivos de las articulaciones (en grados)
     public float[] currentJointAngles = new float[5];
     public float[] targetJointAngles = new float[5];
+    public float[] ex1JointAngles = new float[5];
+    public bool hasCube = false;
 
     // Velocidad de interpolación para el movimiento
     public float speed = 1.0f;
@@ -29,22 +31,12 @@ public class MyRobotController : MonoBehaviour
         // Iniciar el movimiento hacia los ángulos objetivo al presionar la tecla "M"
         if (Input.GetKeyDown(KeyCode.M))
         {
-            StartCoroutine(MoveToPosition(targetJointAngles));
-        }
-
-        // Ajustar los ángulos objetivo con teclas de prueba
-        for (int i = 0; i < 5; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i)) // Presiona teclas 1-5 para incrementar el ángulo
-            {
-                targetJointAngles[i] += 10f; // Incrementa el ángulo objetivo
-            }
+            StartCoroutine(MoveToTargetPosition(targetJointAngles));
+            hasCube = true;
         }
     }
     
-    /// Mueve el brazo robótico hacia los ángulos objetivo especificados.
-    /// <param name="targetAngles">Array con los ángulos objetivo para cada joint.</param>
-    private IEnumerator MoveToPosition(float[] targetAngles)
+    public IEnumerator MoveToTargetPosition(float[] targetAngles)
     {
         // Copia los ángulos actuales del brazo para interpolar
         float[] startAngles = new float[5];
@@ -65,9 +57,17 @@ public class MyRobotController : MonoBehaviour
                 currentJointAngles[i] = Mathf.Lerp(startAngles[i], targetAngles[i], journey);
             }
 
-            // Aplicar los ángulos interpolados a cada joint
-            SetJointAngles(currentJointAngles);
-            yield return null;
+            if(hasCube == false)
+            {
+                // Aplicar los ángulos interpolados a cada joint
+                SetJointAngles(currentJointAngles);
+                yield return null;
+            }
+            else
+            {
+                SetEx1Angles(ex1JointAngles);
+                yield return null;
+            }
         }
 
         // Asegurarse de que los ángulos finales sean exactos
@@ -75,18 +75,35 @@ public class MyRobotController : MonoBehaviour
         {
             currentJointAngles[i] = targetAngles[i];
         }
+        if (hasCube == false)
+        {
+            // Aplicar los ángulos interpolados a cada joint
+            SetJointAngles(currentJointAngles);
+        }
+        else
+        {
+            // Aplicar los ángulos interpolados a cada joint
+            SetEx1Angles(ex1JointAngles);
+        }
         SetJointAngles(currentJointAngles);
     }
 
-    /// Aplica los ángulos actuales a las articulaciones del brazo robótico.
-    /// <param name="angles">Array de ángulos en grados para cada joint.</param>
     private void SetJointAngles(float[] angles)
     {
         // Aplicar ángulos a cada joint:
-        joints[0].localRotation = Quaternion.Euler(-90, 40, angles[0]); 
-        joints[1].localRotation = Quaternion.Euler(angles[1], 0, -180); 
+        joints[0].localRotation = Quaternion.Euler(0, angles[0], 0); 
+        joints[1].localRotation = Quaternion.Euler(angles[1], 0, 0); 
         joints[2].localRotation = Quaternion.Euler(angles[2], 0, 0);
-        joints[3].localRotation = Quaternion.Euler(0, 0, angles[3]);
-        joints[4].localRotation = Quaternion.Euler(angles[4], 0, 0);
+        joints[3].localRotation = Quaternion.Euler(angles[3], 0, 0);
+        joints[4].localRotation = Quaternion.Euler(0, 0, angles[4]);
     }
+
+    private void SetEx1Angles(float[] angles)
+    {
+        joints[0].localRotation = Quaternion.Euler(0, angles[0], 0);
+        joints[1].localRotation = Quaternion.Euler(angles[1], 0, 0);
+        joints[2].localRotation = Quaternion.Euler(angles[2], 0, 0);
+        joints[3].localRotation = Quaternion.Euler(angles[3], 0, 0);
+        joints[4].localRotation = Quaternion.Euler(0, 0, angles[4]);
+    }    
 }

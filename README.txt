@@ -1,26 +1,26 @@
-Nerea Matrtínez y Júlia Martos
+GRADIENT DESCENT METHOD
 
-Link a GitHub: https://github.com/jul0903/RobotAnimation.git
+Link al repo: https://github.com/jul0903/RobotAnimation
 
-Escena Ex 1 (Script: RobotController):
-Update() --> Iniciamos el movimiento con la tecla "M".
+Júlia Martos Moraleda
+Nerea Martinez León
 
-MoveToTargetPosition (float[] targetAngles) --> Colocamos los joints en los ángulos iniciales para después moverlos hacia el target según los ángulos deseados.
+IK Implementation
+Para implementar el movimiento de los joints, decidimos probar con una versión pequeña del brazo (con solo 4 joints) a partir de la clase y script de Gradient Descent con Quaternions:
+Para ello, hemos creado un script “GradientArm”, que irtera una lista de joints (desde el 0 hasta el endfactor) y calcula y aplica la rotación del siguiente joint en función del gradient y coste. Se basa en la idea de minimizar el coste (distancia entre el endfactor y target).
 
-SetJointAngles(float[] angles) --> Se aplican las rotaciones para llegar a los ángulos deseados.
-
-
-Escena Inverse Kinematic (Script: FordwardKinematic2 y Joint):
-- Joint
-Awake() --> Seteamos el offset y el axis (el eje en el que se van a aplicar las rotaciones) de cada joint. Se hace mdiante el inspector en cada joint.
-
-- ForwardKinematics2
-GetJoints() --> Getter de joints.
-
-ForwardKin(float[] angles, Joint[] joints) --> Se calculan las rotaciones en los axis que estan definidos en cada joint.
-
-MoveToTarget() --> Mediante CCD Creamos un vector hacia la dirección del target y a partir de la dirección a la que está mirando el brazo calcula el ángulo entre uno y otro y lo suma en cada joint para que éstos vayan hacia el target.
+“Gradient Arm”
+Guarda los joints y distancias (links) del brazo. Si no ha llegado al target (costfunc > tolerance):
+ - Calcula la gradiente de la función de costo con GetGradient() usando diferencias finitas, es decir, calculando cuántos steps hay que ajustar a cada ángulo de rotación.
+ - Actualiza theta usando gradient descendient con la función lossCostFunction. 
+ - Calcula las posiciones nuevas con endFactorFunction() y actualiza las posiciones de cada Joint. Utiliza quaternions y las rotaciones se van acumulando. Al final, ajusta la orientación del endfactor para que mire hacia el target.
+Lo hemos querido hacer así ya que al ser modular, podemos poner tantos joints como queramos.
 
 
-Webs utilizadas:
-https://www.alanzucconi.com/2017/04/06/implementing-forward-kinematics/
+“Gradient Claw”
+Para las garras del brazo hemos hecho un script a parte, referenciando al script del brazo para poder comprobar la tolerancia.
+Guarda las variables de rotación iniciales y a la hora de cerrar la garra (Close claw) interpola las rotaciones de los joints hacia el target, que va indicado por un ángulo que le hemos puesto nosotras. En este caso, todas las garras tienen que rotar en el mismo eje y un mismo ángulo, es por eso que hemos puesto 30º en el eje x.
+Hace lo mismo para abrir la garra pero con las variables al revés: es por eso que guardamos las rotaciones iniciales.
+
+“Player Movement”
+Movimiento simple de jugador con WASD y SPACE para saltar.

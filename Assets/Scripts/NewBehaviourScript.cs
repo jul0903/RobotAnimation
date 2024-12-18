@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NewBehaviourScript : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
 
         theta = Vector4.zero;
-        costFunction = Vector3.Distance(endFactor.position, target.position) * Vector3.Distance(endFactor.position, target.position); 
+        costFunction = Vector3.SqrMagnitude(endFactor.position - target.position); 
     }
 
     // Update is called once per frame
@@ -54,9 +55,8 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 Joints[i].position = newPosition[i];
             }
-            //Joint1.position = newPosition[0];
-           // Joint2.position = newPosition[1];
-            endFactor.position = newPosition[numberOfJoints - 2];
+          
+            endFactor.position = newPosition[numberOfJoints - 1];
 
         }
 
@@ -64,7 +64,7 @@ public class NewBehaviourScript : MonoBehaviour
         
     }
 
-    //Calcula posiciones de los joints en funcion de theta y los joints anteriores
+    //Calcula posiciones de los joints en funcion de theta y los joints anteriores, returnea las posiciones nuevas
     Vector3[] endFactorFunction(Vector4 theta)
     {
         Vector3[] result = new Vector3[numberOfJoints];
@@ -87,15 +87,30 @@ public class NewBehaviourScript : MonoBehaviour
             result[i + 1] = currentPosition;
         }
 
+        //Rotacion al endfactor para que apunte al target
+        Vector3 endPosition = result[numberOfJoints - 1]; // Endfactor
+        Vector3 directionToTarget = (target.position - endPosition).normalized;
+
+        Quaternion finalRotation = Quaternion.LookRotation(Vector3.forward, directionToTarget); // el forward esta en el eje y
+
+        Joints[numberOfJoints - 1].rotation = finalRotation;
+
         return result;
     }
 
     //Actualiza la distancia de la pos final hasta el target
     float lossCostFunction(Vector4 theta) {
 
-        Vector3 endPosition = endFactorFunction(theta)[numberOfJoints - 2];
+       // Vector3[] positions = endFactorFunction(theta);
+        Vector3 endPosition = endFactorFunction(theta)[numberOfJoints - 1]; //endfactor pos
 
-        return Vector3.SqrMagnitude(endPosition - target.position);
+        //Donde quiero que apunte el endfactor (hacia el target)
+        // Vector3 endDirection = (target.position - endPosition).normalized;
+
+        //Direccion que tiene ahora el endfactor
+        //  Vector3 currentDirection = (positions[numberOfJoints - 1] - positions[numberOfJoints - 2]).normalized;
+
+        return Vector3.SqrMagnitude(endPosition - target.position); // + 0.5f * (1 - Vector3.Dot(endDirection, currentDirection));
     }
 
    //Calcula el gradient y el cost con la funcion de diferencias finitas

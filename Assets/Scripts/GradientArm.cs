@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewBehaviourScript : MonoBehaviour
+public class GradientArm : MonoBehaviour
 {
 
     public List<Transform> Joints;
@@ -25,6 +25,8 @@ public class NewBehaviourScript : MonoBehaviour
 
     private int numberOfJoints;
 
+    public bool grabSpiderman = false;
+
 
     void Start()
     {
@@ -44,8 +46,10 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("cost function = " + costFunction);
+        //Debug.Log("cost function = " + costFunction);
         if (costFunction > tolerance) {
+
+            grabSpiderman = false;
 
             gradient = GetGradient(theta);
             theta -= alpha * gradient;
@@ -58,6 +62,10 @@ public class NewBehaviourScript : MonoBehaviour
           
             endFactor.position = newPosition[numberOfJoints - 1];
 
+        }
+        else
+        {
+            grabSpiderman = true;
         }
 
         costFunction = lossCostFunction(theta);
@@ -101,14 +109,8 @@ public class NewBehaviourScript : MonoBehaviour
     //Actualiza la distancia de la pos final hasta el target
     float lossCostFunction(Vector4 theta) {
 
-       // Vector3[] positions = endFactorFunction(theta);
+     
         Vector3 endPosition = endFactorFunction(theta)[numberOfJoints - 1]; //endfactor pos
-
-        //Donde quiero que apunte el endfactor (hacia el target)
-        // Vector3 endDirection = (target.position - endPosition).normalized;
-
-        //Direccion que tiene ahora el endfactor
-        //  Vector3 currentDirection = (positions[numberOfJoints - 1] - positions[numberOfJoints - 2]).normalized;
 
         return Vector3.SqrMagnitude(endPosition - target.position); // + 0.5f * (1 - Vector3.Dot(endDirection, currentDirection));
     }
@@ -144,4 +146,11 @@ public class NewBehaviourScript : MonoBehaviour
 
         return gradientVector;
      }
+
+    public float GetCostFunc()
+    {
+        return costFunction;
+    }
+
+    public bool GetGrabSpiderman() { return grabSpiderman; }
 }

@@ -16,12 +16,14 @@ public class GradientClaw : MonoBehaviour
     Quaternion[] initialRotations;
     Quaternion targetRotation; //Rotacion final
 
-    bool isClosing = false;
+    public GameObject claw;
 
+    public bool doNotOpenAgain = false;
 
     private void Start()
     {
         numberOfJoints = ClawJoints.Count;
+
         //me guardo las rotaciones iniciales para multiplicarlas por las del target
         initialRotations = new Quaternion[numberOfJoints];
         for (int i = 0; i < numberOfJoints; i++)
@@ -37,11 +39,11 @@ public class GradientClaw : MonoBehaviour
     {
       if (arm.GetCostFunc() <= arm.tolerance)
         {
-            isClosing = true;
             CloseClaw(1f);
         }
         else
         {
+            if(!doNotOpenAgain)
             OpenClaw(1f);
         }
       
@@ -54,7 +56,19 @@ public class GradientClaw : MonoBehaviour
 
             ClawJoints[i].localRotation = Quaternion.Slerp(ClawJoints[i].localRotation, initialRotations[i] * targetRotation, Time.deltaTime * speed);
 
-        } 
+        }
+
+        //Si el target sigue dentro de la claw cuando esta se ha cerrado, pickeo el target
+         if(ClawJoints[numberOfJoints - 1].localRotation == initialRotations[numberOfJoints - 1] * targetRotation)
+         {
+           Debug.Log("me cieerrooo");
+
+           // GrabSpiderman();
+           
+
+                
+         }
+        
     }
      void OpenClaw(float speed)
     {
@@ -63,5 +77,22 @@ public class GradientClaw : MonoBehaviour
         {
             ClawJoints[i].localRotation = Quaternion.Slerp(ClawJoints[i].localRotation, initialRotations[i], Time.deltaTime * speed);
         }
+    }
+
+    void GrabSpiderman()
+    {
+        //Como cada brazo tiene un pivot distinto del spiderman como target, busco el parent del pivot hasta llegar al ultimo (el spiderman general)
+        Transform masterParent = arm.target.gameObject.transform.parent;
+
+        while (masterParent.parent != null)
+        {
+
+            masterParent = masterParent.parent;
+
+        }
+
+        masterParent.SetParent(claw.transform);
+        arm.SetNewtarget();
+        doNotOpenAgain = true;
     }
 }

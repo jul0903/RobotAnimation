@@ -10,6 +10,7 @@ public class GradientArm : MonoBehaviour
     public Transform endFactor;
 
     public Transform target;
+    public Transform newTarget;
 
     private float costFunction;
  
@@ -25,8 +26,7 @@ public class GradientArm : MonoBehaviour
 
     private int numberOfJoints;
 
-    public bool grabSpiderman = false;
-
+  // [SerializeField] public List<GradientClaw> claws;
 
     void Start()
     {
@@ -49,8 +49,6 @@ public class GradientArm : MonoBehaviour
         //Debug.Log("cost function = " + costFunction);
         if (costFunction > tolerance) {
 
-            grabSpiderman = false;
-
             gradient = GetGradient(theta);
             theta -= alpha * gradient;
             Vector3[] newPosition = endFactorFunction(theta);
@@ -63,11 +61,7 @@ public class GradientArm : MonoBehaviour
             endFactor.position = newPosition[numberOfJoints - 1];
 
         }
-        else
-        {
-            grabSpiderman = true;
-        }
-
+ 
         costFunction = lossCostFunction(theta);
         
     }
@@ -152,5 +146,8 @@ public class GradientArm : MonoBehaviour
         return costFunction;
     }
 
-    public bool GetGrabSpiderman() { return grabSpiderman; }
+
+    public void SetNewtarget() {
+        target = newTarget;
+    }
 }

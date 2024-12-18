@@ -51,6 +51,7 @@ MonoBehaviour:
   - {fileID: 6689830806762376767}
   - {fileID: 2960189007901045952}
   - {fileID: 5700854993158302063}
+  claw: {fileID: 6597370097730320031}
 --- !u!1 &105801687247558133
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,6 +1170,7 @@ MonoBehaviour:
   - {fileID: 907656403520243389}
   - {fileID: 5384496092302806225}
   - {fileID: 5396270583917556706}
+  claw: {fileID: 6597370097730320031}
 --- !u!1 &1869935689348851743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,6 +1264,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 268709987234688666}
   - {fileID: 2453920906361431972}
   m_Father: {fileID: 0}
   m_RootOrder: -1
@@ -2137,6 +2140,7 @@ MonoBehaviour:
   - {fileID: 1344663740548142416}
   - {fileID: 1679670091189857377}
   - {fileID: 5126667488275277906}
+  claw: {fileID: 6597370097730320031}
 --- !u!1 &3156798167143133995
 GameObject:
   m_ObjectHideFlags: 0
@@ -7356,9 +7360,13 @@ MonoBehaviour:
   - {fileID: 2949447921858121200}
   endFactor: {fileID: 1823850028628720926}
   target: {fileID: 0}
+  newTarget: {fileID: 268709987234688666}
   alpha: 0.3
   tolerance: 20
-  grabSpiderman: 0
+  claws:
+  - {fileID: 5738752464008855969}
+  - {fileID: 6446438560018970111}
+  - {fileID: 6121100645869867522}
 --- !u!1 &8906213469779540780
 GameObject:
   m_ObjectHideFlags: 0
@@ -7538,6 +7546,37 @@ Transform:
   - {fileID: 5828611458518389589}
   - {fileID: 9000597741941688088}
   m_Father: {fileID: 5918878399216298989}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9085394894118731083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 268709987234688666}
+  m_Layer: 0
+  m_Name: newTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &268709987234688666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085394894118731083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.08, y: 17.03, z: -20.68}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2186310583987753688}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9139006602477072052

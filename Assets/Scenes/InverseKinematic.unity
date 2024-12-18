@@ -140,6 +140,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brazo (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1969039154554304805, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2186310583987753688, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -219,6 +223,7 @@ GameObject:
   - component: {fileID: 208902043}
   - component: {fileID: 208902042}
   - component: {fileID: 208902041}
+  - component: {fileID: 208902045}
   m_Layer: 0
   m_Name: DrOctopus
   m_TagString: Untagged
@@ -318,6 +323,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &208902045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208902040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca541547dc30dca40ae18f314c86f63a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arms:
+  - {fileID: 1266459157}
+  - {fileID: 1498138994}
+  - {fileID: 1751377369}
+  - {fileID: 1389565428}
 --- !u!4 &662740245 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2186310583987753688, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
@@ -521,6 +543,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brazo (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1969039154554304805, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2186310583987753688, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -588,6 +614,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -5391118567496675588, guid: 7e1de64def94fd44a927fe672b72899a, type: 3}
   m_PrefabInstance: {fileID: 1891037634}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1266459157 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6998468684139816976, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
+  m_PrefabInstance: {fileID: 877191026032871770}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c462e58dd56cd974ea68397c5bda20d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1294939835
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,6 +945,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1389565428 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6998468684139816976, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
+  m_PrefabInstance: {fileID: 87497003}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c462e58dd56cd974ea68397c5bda20d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1498138994 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6998468684139816976, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
+  m_PrefabInstance: {fileID: 1855068140}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c462e58dd56cd974ea68397c5bda20d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1751377369 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6998468684139816976, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
+  m_PrefabInstance: {fileID: 1057737943}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c462e58dd56cd974ea68397c5bda20d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1754479969 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 962934165503485174, guid: 7e1de64def94fd44a927fe672b72899a, type: 3}
@@ -924,6 +994,10 @@ PrefabInstance:
     - target: {fileID: 1969039154554304805, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
       propertyPath: m_Name
       value: Brazo (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969039154554304805, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2186310583987753688, guid: 70b404a8a74f59c44bc8917f6ee23c21, type: 3}
       propertyPath: m_RootOrder

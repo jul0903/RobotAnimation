@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -8,10 +9,6 @@ public class GradientClaw : MonoBehaviour
 
     public GradientArm arm;
     public List<Transform> ClawJoints;
-    public Transform endFactor;
-
-    public Transform target;
-
 
     private int numberOfJoints;
 
@@ -19,6 +16,7 @@ public class GradientClaw : MonoBehaviour
     Quaternion[] initialRotations;
     Quaternion targetRotation; //Rotacion final
 
+    bool isClosing = false;
 
 
     private void Start()
@@ -37,27 +35,33 @@ public class GradientClaw : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (arm.GetCostFunc() <= arm.tolerance)
+      if (arm.GetCostFunc() <= arm.tolerance)
         {
-            //Debug.Log(numberOfJoints);
-            CloseClaw(0.5f);
-
+            isClosing = true;
+            CloseClaw(1f);
         }
-
+        else
+        {
+            OpenClaw(1f);
+        }
+      
     }
-
 
     void CloseClaw(float speed)
     {
-
+        // Interpola hacia la rotación objetivo
         for (int i = 0; i < numberOfJoints ; i++) {
 
-            // Interpola suavemente hacia la rotación objetivo
             ClawJoints[i].localRotation = Quaternion.Slerp(ClawJoints[i].localRotation, initialRotations[i] * targetRotation, Time.deltaTime * speed);
-           // Debug.Log("entras??????????");
 
+        } 
+    }
+     void OpenClaw(float speed)
+    {
+        // Interpola suavemente hacia la rotación inicial
+        for (int i = 0; i < numberOfJoints; i++)
+        {
+            ClawJoints[i].localRotation = Quaternion.Slerp(ClawJoints[i].localRotation, initialRotations[i], Time.deltaTime * speed);
         }
-        
     }
 }

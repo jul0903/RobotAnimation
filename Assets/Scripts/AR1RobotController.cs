@@ -8,6 +8,7 @@ public class AR1RobotController : MonoBehaviour
     // Array de 5 articulaciones del brazo robótico
     public Transform[] joints = new Transform[5];
     float[] initialPos = new float[5];
+    public Transform endFactor;
 
     // Angulos actuales y objetivos de las articulaciones (en grados)
     public float[] currentJointAngles = new float[5];
@@ -17,14 +18,16 @@ public class AR1RobotController : MonoBehaviour
     // Velocidad de interpolación para el movimiento
     public float speed = 1.0f;
 
-
     //movimiento manual o predefinido
     bool manualMovement = false;
 
+    bool obstacle = false;
+    bool onReset = false;
+    float timerToReset = 0.0f;
     private void Start()
     {
         //Nos guardamos las posiciones iniciales del brazo
-        /*initialPos[0] = joints[0].localEulerAngles.y ;
+        /*initialPos[0] =  joints[0].localEulerAngles.y ;
         initialPos[1] = joints[1].localEulerAngles.x;
         initialPos[2] = joints[2].localEulerAngles.x;
         initialPos[3] = joints[3].localEulerAngles.x;
@@ -34,32 +37,31 @@ public class AR1RobotController : MonoBehaviour
         initialPos[2] = -42.872f;
         initialPos[3] = -40.43f;
         initialPos[4] = -41.725f;
+        for (int i = 0; i < 5; i++)
+        {
+            manualTargetJointAngles[i] = initialPos[i];
+            currentJointAngles[i] = initialPos[i];
+        }
 
     }
     void Update()
     {
-        // Iniciar el movimiento hacia los ángulos objetivo al presionar la tecla "M"
-        if (Input.GetKeyDown(KeyCode.M))
+        // Iniciar el movimiento automarico prefinido presionar la tecla "A"
+        if (Input.GetKeyDown(KeyCode.A))
         {
             manualMovement = false;
+            StopAllCoroutines();
             StartCoroutine(MoveToTargetPosition(autoTargetJointAngles));
         }
 
         //Movimiento en tiempo real
+        MoveManually();
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (manualMovement)
         {
-            manualMovement = true;
-            manualTargetJointAngles[0] -= 5;
+            StopAllCoroutines();
+            StartCoroutine(MoveToTargetPosition(manualTargetJointAngles));
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            manualMovement = true;
-            manualTargetJointAngles[0] += 5;
-        }
-
-        if(manualMovement)
-         StartCoroutine(MoveToTargetPosition(manualTargetJointAngles));
 
         //Reset
         if (Input.GetKeyDown(KeyCode.R))
@@ -67,8 +69,122 @@ public class AR1RobotController : MonoBehaviour
             manualMovement = false;
             ResetToStart();
         }
-        
 
+        if(!onReset)
+            ObstacleAvoidance();
+        else
+        {
+            timerToReset += Time.deltaTime;
+            if(timerToReset > 2f)
+            {
+                onReset = false;
+                timerToReset = 0f;
+            }
+        }
+
+    }
+
+    void ObstacleAvoidance()
+    {
+        obstacle = Physics.Raycast(endFactor.position, endFactor.up, 1f) ||
+        Physics.Raycast(endFactor.position, endFactor.right, 1f) ||
+        Physics.Raycast(endFactor.position, -endFactor.right, 1f) ||
+        Physics.Raycast(endFactor.position, endFactor.forward, 1f) ||
+        Physics.Raycast(endFactor.position, -endFactor.forward, 1f);
+
+        if(obstacle)
+        {
+            StopAllCoroutines();
+            onReset = true;
+            manualMovement = false;
+            ResetToStart();
+        }
+
+        Debug.Log(obstacle);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(endFactor.position, endFactor.up * 1);
+        Gizmos.DrawRay(endFactor.position, endFactor.right * 1);
+        Gizmos.DrawRay(endFactor.position, -endFactor.right * 1);
+        Gizmos.DrawRay(endFactor.position, endFactor.forward * 1);
+        Gizmos.DrawRay(endFactor.position, -endFactor.forward * 1);
+    }
+
+    private void MoveManually()
+    {
+        if (obstacle)
+            return;
+
+        //Joint 0
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[0] += 50f * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[0] -= 50f * Time.deltaTime;
+        }
+
+        //Joint 1
+        if (Input.GetKey(KeyCode.Alpha3))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[1] += 50f * Time.deltaTime;
+            manualTargetJointAngles[1] = Mathf.Clamp(manualTargetJointAngles[1], -90f, 90f);
+        }
+        if (Input.GetKey(KeyCode.Alpha4))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[1] -= 50f * Time.deltaTime;
+            manualTargetJointAngles[1] = Mathf.Clamp(manualTargetJointAngles[1], -90f, 90f);
+        }
+
+        //Joint 2
+        if (Input.GetKey(KeyCode.Alpha5))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[2] += 50f * Time.deltaTime;
+            manualTargetJointAngles[2] = Mathf.Clamp(manualTargetJointAngles[2], -90f, 90f);
+        }
+        if (Input.GetKey(KeyCode.Alpha6))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[2] -= 50f * Time.deltaTime;
+            manualTargetJointAngles[2] = Mathf.Clamp(manualTargetJointAngles[2], -90f, 90f);
+        }
+
+        //Joint 3
+        if (Input.GetKey(KeyCode.Alpha7))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[3] += 50f * Time.deltaTime;
+            manualTargetJointAngles[3] = Mathf.Clamp(manualTargetJointAngles[3], -90f, 90f);
+        }
+        if (Input.GetKey(KeyCode.Alpha8))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[3] -= 50f * Time.deltaTime;
+            manualTargetJointAngles[3] = Mathf.Clamp(manualTargetJointAngles[3], -90f, 90f);
+        }
+
+        //Joint 4
+        if (Input.GetKey(KeyCode.Alpha9))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[4] += 50f * Time.deltaTime;
+            manualTargetJointAngles[4] = Mathf.Clamp(manualTargetJointAngles[4], -90f, 90f);
+        }
+        if (Input.GetKey(KeyCode.Alpha0))
+        {
+            manualMovement = true;
+            manualTargetJointAngles[4] -= 50f * Time.deltaTime;
+            manualTargetJointAngles[4] = Mathf.Clamp(manualTargetJointAngles[4], -90f, 90f);
+        }
+        
     }
 
     public IEnumerator MoveToTargetPosition(float[] targetAngles)
@@ -80,20 +196,20 @@ public class AR1RobotController : MonoBehaviour
             startAngles[i] = currentJointAngles[i];
         }
 
-        float journey = 0f;
+        float interpolationStep = 0f;
 
         // Interpolación desde los ángulos actuales hasta los ángulos objetivo
-        while (journey < 1f)
+        while (interpolationStep < 1f)
         {
-            journey += Time.deltaTime * speed;
+            interpolationStep += Time.deltaTime * speed;
             for (int i = 0; i < 5; i++)
             {
                 // Interpolación lineal de cada ángulo
-                currentJointAngles[i] = Mathf.Lerp(startAngles[i], targetAngles[i], journey);
+                currentJointAngles[i] = Mathf.Lerp(startAngles[i], targetAngles[i], interpolationStep);
             }
             // Aplicar los ángulos interpolados a cada joint
             SetJointAngles(currentJointAngles);
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
 
         // Asegurarse de que los ángulos finales sean exactos
@@ -116,7 +232,13 @@ public class AR1RobotController : MonoBehaviour
 
     void ResetToStart()
     {
+        StopAllCoroutines();
         StartCoroutine(MoveToTargetPosition(initialPos));
+        for (int i = 0; i < 5; i++)
+        {
+            manualTargetJointAngles[i] = initialPos[i];
+            currentJointAngles[i] = initialPos[i];
+        }
     }
      
 

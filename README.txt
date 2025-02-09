@@ -5,30 +5,14 @@ Link al repo: https://github.com/jul0903/RobotAnimation
 Júlia Martos Moraleda
 Nerea Martinez León
 
+El proyecto de Unity funciona con varios scripts en función del objeto.
+Path: Assets > Scenes > AA3
 
-IK Implementation
-Para implementar el movimiento de los joints, decidimos probar con una versión pequeña del brazo (con solo 4 joints) a partir de 
-la clase y script de Gradient Descent con Quaternions:
-Para ello, hemos creado un script “GradientArm”, que irtera una lista de joints (desde el 0 hasta el endfactor) y calcula y aplica 
-la rotación del siguiente joint en función del gradient y coste. Se basa en la idea de minimizar el coste (distancia entre el endfactor 
-y target).
-
-“Gradient Arm”
-Guarda los joints y distancias (links) del brazo. Si no ha llegado al target (costfunc > tolerance):
- - Calcula la gradiente de la función de costo con GetGradient() usando diferencias finitas, es decir, calculando cuántos steps hay que 
-ajustar a cada ángulo de rotación.
- - Actualiza theta usando gradient descendient con la función lossCostFunction. 
- - Calcula las posiciones nuevas con endFactorFunction() y actualiza las posiciones de cada Joint. Utiliza quaternions y las rotaciones 
-se van acumulando. Al final, ajusta la orientación del endfactor para que mire hacia el target.
-Lo hemos querido hacer así ya que al ser modular, podemos poner tantos joints como queramos.
-
-
-“Gradient Claw”
-Para las garras del brazo hemos hecho un script a parte, referenciando al script del brazo para poder comprobar la tolerancia.
-Guarda las variables de rotación iniciales y a la hora de cerrar la garra (Close claw) interpola las rotaciones de los joints hacia el 
-target, que va indicado por un ángulo que le hemos puesto nosotras. En este caso, todas las garras tienen que rotar en el mismo eje y 
-un mismo ángulo, es por eso que hemos puesto 30º en el eje x.
-Hace lo mismo para abrir la garra pero con las variables al revés: es por eso que guardamos las rotaciones iniciales.
-
-“Player Movement”
-Movimiento simple de jugador con WASD y SPACE para saltar.
+Scripts
+Tenemos 3:
+FABRIK → Está en el armature del brazo. Controla el movimiento de éste con 35 joints mediante el método FABRIK. También hemos añadido que la garra apunte hacia el target.
+El brazo siempre persigue al dron, y una vez la distancia es menor a la tolerancia, se espera 2 segundos y le devuelve el dron al astronauta. Un problema al que nos hemos enfrentado, es que a pesar de poner diferentes funciones de Forward(), el movimiento de retorno al astronauta lo teletransporta.
+DroneMovement → Controla el movimiento del Dron. De default está en manual y se controla con WASD y QE para mover y subir y bajar, pero si pulsas la tecla 1, se cambia a un conjunto de posiciones predefinidas. Una vez el brazo coje el dron, este desactiva su movimiento para evitar errores, y en el script de FABRIK pasa a ser hijo del brazo para poder moverse con él.
+CCDFromBottom → Se aplica en cada brazo. Ya que nuestro astronauta tiene los brazos cortos, le hemos añadido varios joints para que se vea mejor. 
+Los brazos están constantemente buscando el target ( el dron).
+Hemos tratado de aplicar constraints en base al ángulo y eje, pero nos ha dado muchos problemas así que hemos priorizado pulir otros aspectos de la práctica.  

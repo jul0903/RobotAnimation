@@ -112,7 +112,12 @@ public class CCDFromBottom : MonoBehaviour
     void UpdatePosition(int index, float rotation, Vector3 axis)
     {
 
-        Quaternion q = Quaternion.AngleAxis(rotation * 180 / Mathf.PI, axis);
+         float minAngle = -1f * Mathf.Deg2Rad; // Límite inferior en radianes
+        float maxAngle = 1f * Mathf.Deg2Rad;  // Límite superior en radianes
+
+        rotation = Mathf.Clamp(rotation, minAngle, maxAngle);
+
+        Quaternion q = Quaternion.AngleAxis(rotation * Mathf.Rad2Deg, axis);
 
         if (index <= 3)
         {
@@ -124,11 +129,13 @@ public class CCDFromBottom : MonoBehaviour
 
         end.position = Joints[4] + q * Links[4];
 
-
+        // Aplicar posiciones a los joints reales
         Joint1.position = Joints[1];
         Joint2.position = Joints[2];
         Joint3.position = Joints[3];
         Joint4.position = Joints[4];
+
+       
 
         getLinks();
     }

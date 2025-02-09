@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class GradientClaw : MonoBehaviour
 {
-
-    public GradientArm arm;
+    public FABRIK arm;
     public List<Transform> ClawJoints;
 
     private int numberOfJoints;
@@ -37,7 +36,7 @@ public class GradientClaw : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      if (arm.GetCostFunc() <= arm.tolerance)
+      if (arm.canGrab)
         {
             CloseClaw(1f);
         }
@@ -77,22 +76,5 @@ public class GradientClaw : MonoBehaviour
         {
             ClawJoints[i].localRotation = Quaternion.Slerp(ClawJoints[i].localRotation, initialRotations[i], Time.deltaTime * speed);
         }
-    }
-
-    void GrabSpiderman()
-    {
-        //Como cada brazo tiene un pivot distinto del spiderman como target, busco el parent del pivot hasta llegar al ultimo (el spiderman general)
-        Transform masterParent = arm.target.gameObject.transform.parent;
-
-        while (masterParent.parent != null)
-        {
-
-            masterParent = masterParent.parent;
-
-        }
-
-        masterParent.SetParent(claw.transform);
-        arm.SetNewtarget();
-        doNotOpenAgain = true;
     }
 }

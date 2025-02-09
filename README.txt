@@ -1,4 +1,4 @@
-IK con GRADIENT DESCENT METHOD
+FABRIK AND CCD
 
 Link al repo: https://github.com/jul0903/RobotAnimation
 
